@@ -74,12 +74,16 @@ namespace mtm {
             }
         }
 
-        
+
 
         class ConstIterator;
         typedef const char* constIterator;
-        constIterator begin() const;
-        constIterator end() const;
+        constIterator begin() const {
+            return ConstIterator(head);
+        }
+        constIterator end() const {
+            return  ConstIterator(nullptr);
+        }
 
         int length() const {
             const Node<T>* curr = head;
@@ -91,7 +95,64 @@ namespace mtm {
             return cnt;
         }
 
+        SortedList& remove(const T& elem)
+        {
+            if (head == nullptr) {
+                return *this;
+            }
 
+            if (head->data == elem) {
+                Node* nodeToDelete = head;
+                head = head->next;
+                delete nodeToDelete;
+                return *this;
+            }
+
+            Node* curr = head;
+
+            while (curr->next != nullptr &&
+                   !(curr->next->data == elem)) {
+                curr = curr->next;
+                   }
+
+            if (curr->next != nullptr) {
+                Node* nodeToDelete = curr->next;
+                curr->next = curr->next->next;
+                delete nodeToDelete;
+            }
+
+            return *this;
+        }
+
+        template<class Predicate>
+        SortedList filter(Predicate predicate) const {
+            SortedList result;
+            const Node* curr = head;
+
+            while (curr != nullptr) {
+                if (predicate(curr->data)) {
+                    result.insert(curr->data);
+                }
+
+                curr = curr->next;
+            }
+
+            return result;
+        }
+
+        template<class Function>
+        SortedList apply(Function function) const
+        {
+            SortedList result;
+            const Node* curr = head;
+
+            while (curr != nullptr) {
+                result.insert(function(curr->data));
+                curr = curr->next;
+            }
+
+            return result;
+        }
         /**
          *
          * the class should support the following public interface:
