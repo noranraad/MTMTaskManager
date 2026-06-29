@@ -190,17 +190,17 @@ namespace mtm {
 
         ConstIterator& operator++() {
             index--;
-            if (index > SortedList<T>::length || index < 0) throw Exception();
+            if (index > SortedList<T>::length(this) || index < 0) throw Exception();
             return *this;
         }
 
         bool operator!=(const ConstIterator& other) const{
-            if (index > SortedList<T>::length || index < 0) throw Exception();
+            if (index > SortedList<T>::length(this) || index < 0) throw Exception();
             return this->index != other.index;
         }
 
         T* operator*() const{
-            if (index > SortedList<T>::length || index < 0) throw Exception();
+            if (index > SortedList<T>::length(this) || index < 0) throw Exception();
             return sortedList->head->data[index];
         }
 
